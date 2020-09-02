@@ -51,7 +51,7 @@ class MyQtMainWindow(QMainWindow):
         self._initMenuBar()
         self.setMouseTracking(True)
 
-       
+
 
     def event(self,event):
         try:
@@ -65,7 +65,7 @@ class MyQtMainWindow(QMainWindow):
                         print("ignoring command from " + command['from'] + "command recieved was" + command['funcName'])
                     else:
                         self.rpc_args = command['args']
-                        time.sleep(0.0001) 
+                        time.sleep(0.0001)
                         exec('self.'+command['funcName']+'()')
                 except Exception as err:
                     print("Error: {0}".format(err))
@@ -91,7 +91,7 @@ class MyQtMainWindow(QMainWindow):
         else:
             QMainWindow.closeEvent(self,event)
 
-    def addText(self): 
+    def addText(self):
         text =self.rpc_args['text']
         color =self.rpc_args['color']
         size =self.rpc_args['size']
@@ -114,7 +114,7 @@ class MyQtMainWindow(QMainWindow):
             self.server['UI_FEEDBACK'][str(id)] = {'REPLIED':True, 'MSG':'YES'}
         else:
             self.server['UI_FEEDBACK'][str(id)] = {'REPLIED':True, 'MSG':'NO'}
-            
+
         pass
 
     def addPrompt(self,title,text):
@@ -164,16 +164,17 @@ class MyQtMainWindow(QMainWindow):
 
 
 
-        
+
     def test(self):
         print("inde the test function")
 
-    
+
     def _initMenuBar(self):
         bar = self.menuBar()
         mode = bar.addMenu("Mode Switch")
         mode.addAction("PointClickNav")
         mode.addAction("DirectTeleOperation")
+        mode.addAction("Disinfect")
         mode.triggered[QAction].connect(self._processModeTrigger)
 
         action = bar.addMenu("Quick Action")
@@ -213,18 +214,18 @@ class MyQtMainWindow(QMainWindow):
         self.right.setFixedSize(600,600)
         self.rightLayout = QVBoxLayout()
         self.right.setLayout(self.rightLayout)
-        
+
         self.glwidget = klamptGLWindow
         self.glwidget.do_reshape(600,600)
         self.glwidget.setParent(self.right)
         self.rightLayout.addWidget(self.glwidget)
-    
+
         self.buttons = {}
         self.welcomeText = QLabel("Welcome to TRINA UI! \n\n\nPlease Refer To Menu Bar Actions For Selecting Operation Mode.")
         self.modeText = QLabel("")
         self.modeText.setWordWrap(True)
         self.welcomeText.setWordWrap(True)
-        
+
         self.leftLayout.addWidget(self.welcomeText)
         self.leftLayout.addWidget(self.modeText)
 
@@ -232,7 +233,7 @@ class MyQtMainWindow(QMainWindow):
         self.splitter.addWidget(self.right)
         self.splitter.setHandleWidth(7)
         self.setCentralWidget(self.splitter)
-    
+
 
 # inner vis plugin
 class MyGLPlugin(vis.GLPluginInterface):
@@ -274,8 +275,8 @@ class MyGLPlugin(vis.GLPluginInterface):
             rightJoystickMock[0] = -1.0
         if c == 'd':
             rightJoystickMock[0] = 1.0
-        self.UIState["controllerButtonState"]["rightController"]["thumbstickMovement"] = rightJoystickMock 
-        self.server["UI_STATE"] = self.UIState 
+        self.UIState["controllerButtonState"]["rightController"]["thumbstickMovement"] = rightJoystickMock
+        self.server["UI_STATE"] = self.UIState
         time.sleep(0.0001)
         if c == 'q':
             self.quit = True
@@ -289,11 +290,11 @@ class MyGLPlugin(vis.GLPluginInterface):
             rightJoystickMock[1] = 0.0
         if c == 's' and rightJoystickMock[1] == -1.0:
             rightJoystickMock[1] = 0.0
-        if c == 'a' and rightJoystickMock[0] == -1.0: 
+        if c == 'a' and rightJoystickMock[0] == -1.0:
             rightJoystickMock[0] = 0.0
         if c == 'd' and rightJoystickMock[0] == 1.0:
             rightJoystickMock[0] = 0.0
-        self.UIState["controllerButtonState"]["rightController"]["thumbstickMovement"] = rightJoystickMock 
+        self.UIState["controllerButtonState"]["rightController"]["thumbstickMovement"] = rightJoystickMock
         self.server["UI_STATE"] = self.UIState
         time.sleep(0.0001)
         return False
@@ -315,10 +316,10 @@ class MyGLPlugin(vis.GLPluginInterface):
                 collided.append((dist,g[0],pt))
 
         self._collect_ray(s,d,collided)
-       
+
         return [g[1] for g in sorted(collided)]
 
-    
+
     def _collect_ray(self, s, d, collided):
         try:
             id = self.global_state['feedbackId']['getRayClick']
@@ -395,7 +396,7 @@ class UI_end_1:
         # init plugin for getting input
         plugin = MyGLPlugin(world, self.global_state,self.server,self.jarvis, self.UIState,self.screenElement)
         vis.pushPlugin(plugin)   #put the plugin on top of the standard visualization functionality.
-       
+
 
 
         vis.show()
@@ -426,7 +427,7 @@ class TrinaQueue(object):
 		self.r = redis.Redis(host = host, port = port)
 		self.key = key
 	def push(self,item):
-		self.r.rpush(self.key,item) 
+		self.r.rpush(self.key,item)
 
 
 

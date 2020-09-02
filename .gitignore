@@ -3,4 +3,8 @@
 __pycache__
 *~
 *.log
+robot_v2/websocket_client-0.56.0/dist/websocket_client-0.56.0-py2.7.egg
+robot_v2/websocket_client-0.56.0/dist/websocket_client-0.56.0-py3.6.egg
+robot_v2/websocket_client-0.56.0/websocket_client.egg-info/PKG-INFO
+robot_v2/websocket_client-0.56.0/websocket_client.egg-info/requires.txt
 
