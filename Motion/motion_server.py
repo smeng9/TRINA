@@ -1,4 +1,7 @@
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+try:
+	from SimpleXMLRPCServer import SimpleXMLRPCServer
+except:
+	from xmlrpc.server import SimpleXMLRPCServer
 import signal
 import sys
 from motion import Motion

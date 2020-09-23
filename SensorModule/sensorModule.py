@@ -27,8 +27,8 @@ import sys
 sys.path.append('../../Motion/')
 from Motion.TRINAConfig import *
 import sensor_msgs
-from utils import *
-from geometry import *
+from .utils import *
+from .geometry import *
 import time 
 from multiprocessing import Process, Pipe
 if(sys.version_info[0] < 3):
@@ -38,6 +38,9 @@ if(sys.version_info[0] < 3):
 
     pass
 else:
+    import rospy
+    import sensor_msgs
+    from sensor_msgs.msg import LaserScan
     import pyzed.sl as sl
 import pyrealsense2 as rs
 import os
