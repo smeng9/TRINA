@@ -14,6 +14,14 @@ echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 echo "instaling other ros libraries"
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+git clone https://github.com/ros-perception/openslam_gmapping
+git clone https://github.com/ros-perception/slam_gmapping
+cd ~/catkin_ws
+catkin_make
+echo "source /home/motion/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 
 echo "installing klampt from source"
 echo "installing basic libraries first"
@@ -93,7 +101,13 @@ sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/r
 sudo apt install cuda
 echo 'export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}' >> ~/.bashrc
 
-echo "install ZED for sensor module"
+cd
+echo "installing ZED for sensor module"
+wget https://download.stereolabs.com/zedsdk/3.2/cu110/ubuntu20
+chmod +x ubuntu20
+./ubuntu20
+wget https://download.stereolabs.com/zedsdk/3.2/ubuntu20/cu110/py38
+python3 -m pip install py38
 
 cd
 cd TRINA/robot_v2/websocket_client-0.56.0
