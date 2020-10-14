@@ -84,8 +84,10 @@ pip3 install klampt
 
 echo "install pyrealsense2 from source as no 3.8 binding existing yet"
 cd
-git clone https://github.com/IntelRealSense/librealsense/
+git clone https://github.com/achirkin/librealsense/
 cd librealsense
+./scripts/setup_udev_rules.sh
+./scripts/patch-realsense-ubuntu-lts.sh
 mkdir build
 cd build
 cmake ../ -DBUILD_PYTHON_BINDINGS:bool=true
