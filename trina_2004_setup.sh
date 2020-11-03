@@ -110,7 +110,8 @@ wget https://download.stereolabs.com/zedsdk/3.2/cu110/ubuntu20
 chmod +x ubuntu20
 ./ubuntu20
 wget https://download.stereolabs.com/zedsdk/3.2/ubuntu20/cu110/py38
-python3 -m pip install py38
+mv py38 pyzed-3.2-cp38-cp38-linux_x86_64.whl
+python3 -m pip install pyzed-3.2-cp38-cp38-linux_x86_64.whl
 
 cd
 cd TRINA/robot_v2/websocket_client-0.56.0
