@@ -10,6 +10,7 @@ import pickle
 import klampt
 import numpy
 import time
+import tf
 from klampt.math import se3
 from klampt import vis, Geometry3D
 from klampt.model import sensing
@@ -40,6 +41,10 @@ if(sys.version_info[0] < 3):
 
     pass
 else:
+    import rospy
+    import sensor_msgs
+    from sensor_msgs.msg import LaserScan
+    import sensor_msgs
     import pyzed.sl as sl
 import pyrealsense2 as rs
 import os
