@@ -384,7 +384,7 @@ class CommandServer:
 
 			time.sleep(3)
 		if(self.mode == 'Physical'):
-			self.sensor_module = Camera_Robot(robot = self.robot, mode = self.mode)
+			self.sensor_module = Camera_Robot(robot = self.robot, mode = self.mode, cameras =['zed_overhead'])
 			print('\n\n\n\n\n initialization of Physical sensor module sucessfull!!\n\n\n')
 		self.health_dict = {}
 		# create the list of threads
@@ -405,8 +405,8 @@ class CommandServer:
 		moduleMonitorThread = threading.Thread(target=self.moduleMonitor)
 		moduleMonitorThread.start()
 		atexit.register(self.shutdown_all)
-		while(True):
-			time.sleep(200)
+		# while(True):
+		#	time.sleep(200)
 		# self.switch_module_activity(['C2'])
 		# self.empty_command.update({'UI':[]})
 
@@ -442,6 +442,9 @@ class CommandServer:
 			velEE_right = self.query_robot.sensedRightEEVelocity()
 			global_EEWrench_right = self.query_robot.sensedRightEEWrench('global')
 			local_EEWrench_right = self.query_robot.sensedRightEEWrench('local')
+		else:
+			global_EEWrench_right = 0
+			local_EEWrench_right = 0
 
 
 		if(self.base_active):
@@ -918,8 +921,32 @@ if __name__=="__main__":
 
 	parser = argparse.ArgumentParser(description='Initialization parameters for TRINA')
 
-	# server = CommandServer(mode = 'Physical',components =  ['right_limb'], modules = ['C1','C2','DirectTeleOperation', 'PointClickGrasp'])
-	server = CommandServer(mode = 'Kinematic',components =  ['base','left_limb','right_limb'], modules = ['C1','C2','DirectTeleOperation', 'PointClickGrasp'])
+	server = CommandServer(mode = 'Physical',components =  ['left_limb'], modules = ['C1','C2','DirectTeleOperation'], codename = 'bubonic')
+	# server = CommandServer(mode = 'Kinematic',components =  ['base','left_limb','right_limb'], modules = ['C1','C2','DirectTeleOperation','PointClickNav', 'PointClickGrasp'])
+	
+	
+	print(server.robot.sensedLeftEETransform())
+	zed_overhead = server.sensor_module.get_rgbd_images()['zed_overhead']
+	import open3d as o3d
+	pcd = o3d.geometry.PointCloud()
+	rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(zed_overhead[0]), o3d.geometry.Image(zed_overhead[1]))
+	print(rgbd_image)
+	import matplotlib.pyplot as plt
+	plt.imshow(zed_overhead[0])
+	plt.show()
+	plt.imshow(zed_overhead[1])
+	plt.show()
+	pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd_image,o3d.camera.PinholeCameraIntrinsic(o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault))
+	o3d.io.write_point_cloud("overhead_ply.pcd", pcd)
+	#rgbd_image = o3d.create_point_cloud_from_rgbd_image(rgbd_image, PinholeCameraIntrinsic(PinholeCameraIntrinsicParameters.PrimeSenseDefault))
+	#o3d.io.write_point_cloud("overhead_ply.pcd", rgbd_image)
+	import subprocess
+	subprocess.run(["/home/motion/gpd/build/detect_grasps", "/home/motion/gpd/cfg/eigen_params.cfg", "overhead_ply.pcd"])
+	
+	
+	zed_o3d = server.sensor_module.get_point_clouds()['zed_overhead']
+	print(zed_o3d.colors)
+	print(np.asarray(zed_o3d.points))
 	while(True):
 		time.sleep(100)
 		pass
